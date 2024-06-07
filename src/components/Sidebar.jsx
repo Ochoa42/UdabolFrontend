@@ -11,13 +11,28 @@ import { MdOutlineAnalytics, MdLogout } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 import { ThemeContext } from "../App";
+import { FaFootballBall} from "react-icons/fa";
+import { HiChevronDown, HiChevronUp } from "react-icons/hi";
+import { useState } from "react";
+import { Children } from "react";
+
 export function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const ModSidebaropen = () => {
     setSidebarOpen(!sidebarOpen);
   };
+
   const { setTheme, theme } = useContext(ThemeContext);
+
   const CambiarTheme = () => {
     setTheme((theme) => (theme === "light" ? "dark" : "light"));
+  };
+
+  const [arrowStates, setArrowStates] = useState(linksArray.map(() => true));
+
+  const [expandedIndex, setExpandedIndex] = useState(null);
+
+  const onclickChangeArrow = (index) => {
+    setExpandedIndex(expandedIndex === index ? null : index);
   };
 
   return (
@@ -27,31 +42,45 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }) {
       </button>
       <div className="Logocontent">
         <div className="imgcontent">
-          <img src={logo} />
+          <FaFootballBall style={{ fontSize: '40px', color: 'blue' }} />
         </div>
-        <h2>codigo369</h2>
+        <h2>Clud Warnes</h2>
       </div>
-      {linksArray.map(({ icon, label, to }) => (
-        <div className="LinkContainer" key={label}>
-          <NavLink
-            to={to}
-            className={({ isActive }) => `Links${isActive ? ` active` : ``}`}
-          >
-            <div className="Linkicon">{icon}</div>
-            {sidebarOpen && <span>{label}</span>}
-          </NavLink>
-        </div>
-      ))}
-      <Divider />
-      {secondarylinksArray.map(({ icon, label, to }) => (
-        <div className="LinkContainer" key={label}>
-          <NavLink
-            to={to}
-            className={({ isActive }) => `Links${isActive ? ` active` : ``}`}
-          >
-            <div className="Linkicon">{icon}</div>
-            {sidebarOpen && <span>{label}</span>}
-          </NavLink>
+      {linksArray.map(({ icon, label, to, children }, index) => (
+        <div className="LinkContainer relative flex items-center flex-col" key={label}>
+          <div className="flex w-full items-center">
+            <NavLink
+              to={to}
+              className={({ isActive }) => `Links${isActive ? ` active` : ``}`}
+            >
+              <div className="Linkicon">{icon}</div>
+              {sidebarOpen && <span>{label}</span>}
+            </NavLink>
+            <button
+              onClick={() => onclickChangeArrow(index)}
+              className="ml-auto"
+            >
+              {sidebarOpen && (expandedIndex === index ? (
+                <HiChevronUp style={{ fontSize: '40px', color: 'black' }} />
+              ) : (
+                <HiChevronDown style={{ fontSize: '40px', color: 'black' }} />
+              ))}
+            </button>
+          </div>
+          {expandedIndex === index && children && (
+            <div className="expanded-content w-full bg-gray-100 p-2">
+              {children.map((child, childIndex) => (
+                <NavLink
+                  to={child.to}
+                  key={child.label}
+                  className="flex items-center pl-4 py-1 text-gray-600 hover:text-gray-900"
+                >
+                  <div className="Linkicon">{child.icon}</div>
+                  <span>{child.label}</span>
+                </NavLink>
+              ))}
+            </div>
+          )}
         </div>
       ))}
       <Divider />
@@ -81,29 +110,36 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }) {
 //#region Data links
 const linksArray = [
   {
-    label: "Home",
+    label: "Usuarios",
     icon: <AiOutlineHome />,
     to: "/",
+    children: [
+      {
+        label: "Oso",
+        icon: <AiOutlineHome />,
+        to: "/socios",
+      },
+    ],
   },
   {
-    label: "Estadisticas",
+    label: "Socios",
     icon: <MdOutlineAnalytics />,
-    to: "/estadisticas",
+    to: "/socios",
+  },
+  {
+    label: "Clientes",
+    icon: <AiOutlineApartment />,
+    to: "/clientes",
+  },
+  {
+    label: "Canchas",
+    icon: <MdOutlineAnalytics />,
+    to: "/canchas",
   },
   {
     label: "Productos",
-    icon: <AiOutlineApartment />,
+    icon: <MdOutlineAnalytics />,
     to: "/productos",
-  },
-  {
-    label: "Diagramas",
-    icon: <MdOutlineAnalytics />,
-    to: "/diagramas",
-  },
-  {
-    label: "Reportes",
-    icon: <MdOutlineAnalytics />,
-    to: "/reportes",
   },
 ];
 const secondarylinksArray = [
@@ -173,7 +209,6 @@ const Container = styled.div`
   }
   .LinkContainer {
     margin: 8px 0;
-   
     padding: 0 15%;
     :hover {
       background: ${(props) => props.theme.bg3};
@@ -201,6 +236,7 @@ const Container = styled.div`
         }
       }
     }
+
   }
   .Themecontent {
     display: flex;

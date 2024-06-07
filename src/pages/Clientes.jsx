@@ -1,8 +1,8 @@
 import styled from "styled-components";
-export function Estadisticas() {
+export function Clientes() {
   return (
     <Container>
-      <h1>Estadistica</h1>
+      <h1>Clientes</h1>
     </Container>
   );
 }

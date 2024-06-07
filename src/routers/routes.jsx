@@ -1,19 +1,19 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Home } from "../pages/Home";
-import { Estadisticas } from "../pages/Estadisticas";
+import { Usuario } from "../pages/Usuario/Usuario";
 import { Productos } from "../pages/Productos";
-import {Diagramas} from "../pages/Diagramas";
-import {Reportes} from "../pages/Reportes";
+import { Clientes } from "../pages/Clientes";
+import { Socios } from "../pages/Socios";
+import { Canchas } from "../pages/Canchas";
 export function MyRoutes() {
   return (
    
      
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Usuario />} />
         <Route path="/productos" element={<Productos />} />
-        <Route path="/estadisticas" element={<Estadisticas />} />
-        <Route path="/diagramas" element={<Diagramas />} />
-        <Route path="/reportes" element={<Reportes />} />
+        <Route path="/clientes" element={<Clientes />} />
+        <Route path="/canchas" element={<Canchas />} />
+        <Route path="/socios" element={<Socios />} />
       </Routes>
     
   );
